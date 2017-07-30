@@ -1,0 +1,4 @@
+nav bar color: https://work.smarchal.com/twbscolor/
+
+ckeditor:
+https://cdn.ckeditor.com/
