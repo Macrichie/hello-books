@@ -8,8 +8,8 @@ module.exports = (sequelize, DataTypes) => {
     classMethods: {
       associate(models) {
         // associations can be defined here
-        Role.belongsToMany(models.StaffMember, {
-          through: 'adminRole',
+        Role.belongsToMany(models.Admin, {
+          through: 'AdminRole',
           foreignKey: 'roleId',
           otherKey: 'adminId',
         });

@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const admin = sequelize.define('admin', {
+  const Admin = sequelize.define('Admin', {
     username: DataTypes.STRING,
     password: DataTypes.STRING,
     firstName: DataTypes.STRING,
@@ -11,17 +11,13 @@ module.exports = (sequelize, DataTypes) => {
     classMethods: {
       associate: (models) => {
         // associations is defined here
-        admin.hasMany(models.Client, {
-          foreignKey: 'caseManagerId',
-          as: 'clients',
-        });
         admin.belongsToMany(models.Role, {
-          through: 'adminRole',
+          through: 'AdminRole',
           foreignKey: 'adminId',
           otherKey: 'roleId',
         });
       },
     }, 
   });
-  return admin;
+  return Admin;
 };

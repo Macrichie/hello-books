@@ -32,7 +32,7 @@ module.exports = {
       caseManagerId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'admin',
+          model: 'Admin',
           key: 'id',
         },
       },

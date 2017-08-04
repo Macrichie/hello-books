@@ -1,13 +1,13 @@
 'use strict';
 module.exports = {
   up(queryInterface, Sequelize) {
-    return queryInterface.createTable('adminRole', {
+    return queryInterface.createTable('AdminRole', {
       adminId: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         allowNull: false,
         references: {
-          model: 'admin',
+          model: 'Admin',
           key: 'id',
         },
       },
@@ -25,6 +25,6 @@ module.exports = {
     });
   },
   down(queryInterface /* , Sequelize */) {
-    return queryInterface.dropTable('adminRole');
+    return queryInterface.dropTable('AdminRole');
   },
 };
