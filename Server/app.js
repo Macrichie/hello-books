@@ -4,7 +4,7 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 
-const RoleController = require('./server/controllers/roles');
+//const RoleController = require('./server/controllers/roles');
 //Set up the express app
 const app = express();
 //Log requests to the console.
@@ -13,9 +13,9 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 //Require our routes into the application.
-//require('./server/routes')(app);
+require('./server/routes')(app);
 
-app.post('/roles', RoleController.create);
+//app.post('/roles', RoleController.create);
 // app.get('/roles', RoleController.findAll);
 // app.delete('/roles', RoleController.deleteAll);
 
