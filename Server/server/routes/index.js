@@ -1,4 +1,5 @@
 const userController = require('../controllers').user;
+//const userbooksController = require('../controllers').userbooks;
 const bookController = require('../controllers').book;
 
 
@@ -10,12 +11,17 @@ module.exports = (app)=> {
 
 	app.post('/api/user', userController.create);
 	app.post('/api/book', bookController.create);
-  	// //app.get('/api/book/bookId', userController.create);
+	app.get('/api/user', userController.list);
+	app.get('/api/book', bookController.list);
   	app.get('/api/user/:userId', userController.retrieve);
-  	// app.put('/api/todos/:todoId', todosController.update);
-  	// app.delete('/api/todos/:todoId', todosController.destroy);
+  	app.get('/api/book/bookId', bookController.retrieve);
+  	app.put('/api/user/:userId', userController.update);
+  	app.put('/api/user/:bookId', bookController.update);
+  	app.delete('/api/user/:userId', userController.destroy);
+  	app.delete('/api/user/:bookId', bookController.destroy);
 
-  	// app.post('/api/todos/:todoId/items', todoItemsController.create);
+
+  	app.post('/api/user/:userId/item', bookController.create);
   	// app.put('/api/todos/:todoId/items/:todoItemId', todoItemsController.update);
   	// app.delete(
     // '/api/todos/:todoId/items/:todoItemId', todoItemsController.destroy

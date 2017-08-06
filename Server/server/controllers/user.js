@@ -1,17 +1,23 @@
 const User = require('../models').User;
-const Books = require('../models').Books;
+//const Books = require('../models').Books;
 
 module.exports = {
 	create(req, res) {
 		return User
 			.create({
 				name: req.body.name,
-                email: req.body.email,
-                password: req.body.password,
-			})
+        email: req.body.email,
+        password: req.body.password,
+      })
 			.then(user => res.status(201).send(user))
 			.catch(error => res.status(400).send(error));
 	},
+  list(req, res) {
+  return User
+    .all()
+    .then(user => res.status(200).send(user))
+    .catch(error => res.status(400).send(error));
+  },
 	retrieve(req, res) {
   		return User
     		.findById(req.params.userId)
@@ -36,7 +42,7 @@ module.exports = {
         }
         return user
           .update({
-            name: req.body.name || user.title,
+            name: req.body.name || user.name,
             email: req.body.email || user.email,
             password: req.body.password || user.password,
           })
