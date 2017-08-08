@@ -4,33 +4,70 @@ module.exports = (sequelize, DataTypes) => {
     title: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
+      validate: {
+        notEmpty: true
+      }
+    },
+    isbn: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      unique: true,
+      validate: {
+        notEmpty: true
+      }
     },
     description: {
       type: DataTypes.STRING,
+      allowNull: true,
+    },
+    author: {
+      type: DataTypes.STRING,
       allowNull: false,
+    },
+    copies: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
+    },
+    adminId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    content: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     category: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: 'technology',
+      validate: {
+        isIn: {
+          args: [['politics', 'sciences', 'history', 'technology', 'fashion', 'languages', 'finance']],
+          msg: 'Use a valid access type'
+        }
+      }
     },
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    image: {
-      type: DataTypes.STRING,
-      allowNull: true
-    }
   }, {
+    freezeTableName: true,
+
     classMethods: {
       associate: (models) => {
-        // associations can be defined here
         Books.belongsTo(models.User, {
-          foreignKey: 'userId',
-          onDelete: 'CASCADE',
+            foreignKey: 'adminId',
+            onDelete: 'SET NULL',
         });
       }
-    }
+    },
+    instanceMethods: {
+      filterBookDetails() {
+        const { createdAt, updatedAt, ...rest } = this.get();
+        return rest;
+      }
+    },
   });
   return Books;
 };

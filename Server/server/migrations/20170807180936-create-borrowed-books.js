@@ -1,19 +1,24 @@
 'use strict';
 module.exports = {
-  up(queryInterface, Sequelize) {
-    return queryInterface.createTable('Role', {
+  up: function(queryInterface, Sequelize) {
+    return queryInterface.createTable('borrowedBooks', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
+      borrowedTitle: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      description: {
-        type: Sequelize.STRING(1023)
+      borrowedId: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
+      returnedDate: {
+        type: Sequelize.DATE,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
@@ -26,6 +31,6 @@ module.exports = {
     });
   },
   down: function(queryInterface /*, Sequelize*/) {
-    return queryInterface.dropTable('Role');
+    return queryInterface.dropTable('borrowedBooks');
   }
 };
