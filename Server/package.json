@@ -4,20 +4,20 @@
   "description": "An Online Library management app",
   "main": "app.js",
   "scripts": {
-    "start:dev": "nodemon ./bin/www",
+    "start:dev": "babel-node ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-   "babel": {
+  "babel": {
     "presets": [
       "es2015",
       "es2016",
-      "es2017",
-      "react"
+      "stage-0"
     ]
   },
   "author": "Makanjuola Olakunle",
   "license": "ISC",
   "dependencies": {
+    "babel-preset-stage-0": "^6.24.1",
     "bcrypt": "^1.0.2",
     "body-parser": "^1.17.2",
     "dotenv": "^4.0.0",
