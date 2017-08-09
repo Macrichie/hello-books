@@ -28,7 +28,7 @@ class Role {
       db.Role.findOne({ where: { title: req.body.title } })
         .then((role) => {
           if (role !== null) {
-            handleError(400, 'Role already exists', res);
+            handleError(400, 'Role already exist', res);
           } else {
             return db.Role.create({
               title: req.body.title,
@@ -41,7 +41,7 @@ class Role {
               })
               .catch(() => {
                 handleError(400,
-                  "We're sorry, the new role couldn't be created", res);
+                  "Sorry, role couldn't be created", res);
               });
           }
         });

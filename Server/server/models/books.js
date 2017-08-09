@@ -52,8 +52,6 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
   }, {
-    freezeTableName: true,
-
     classMethods: {
       associate: (models) => {
         Books.belongsTo(models.User, {

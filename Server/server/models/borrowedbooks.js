@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const BorrowedBook = sequelize.define('BorrowBook', {
+  const borrowedBooks = sequelize.define('borrowedBooks', {
     bookId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -39,5 +39,5 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   });
-  return BorrowedBook;
+  return borrowedBooks;
 };

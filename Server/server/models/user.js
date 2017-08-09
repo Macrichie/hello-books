@@ -1,5 +1,4 @@
 'use strict';
-const bcrypt = require('bcrypt');
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
@@ -31,8 +30,6 @@ module.exports = (sequelize, DataTypes) => {
     },
 
   }, {
-    freezeTableName: true,
-
     classMethods: {
       associate: (models) => {
         User.belongsTo(models.Role, {

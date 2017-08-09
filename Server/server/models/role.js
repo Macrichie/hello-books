@@ -7,19 +7,16 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
 
     },
-    desciption: {
+    description: {
       type: DataTypes.STRING,
       allowNull: false,
 
     },
   }, {
-    freezeTableName: true,
-
     classMethods: {
       associate: (models) => {
         Role.hasMany(models.User, {
-          foreignKey: 'roleId',
-          as: 'roles',
+          foreignKey: 'roleId'
         });
       }
     }

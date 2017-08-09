@@ -49,11 +49,11 @@ class User {
                     });
                   }).catch(() => {
                     handleError(400,
-                      "Sorry, we couldn't sign you up", res);
+                      "Signup Failed", res);
                   });
               })
               .catch(() => {
-                handleError(400, "Sorry, we couldn't sign you up", res);
+                handleError(400, "Signup Failed", res);
               });
           }
         });
@@ -98,7 +98,7 @@ class User {
           }
         })
         .catch(() => {
-          handleError(400, "Sorry, login failed", res);
+          handleError(400, "Login failed", res);
         });
     }
   }
