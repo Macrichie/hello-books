@@ -5,16 +5,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
-      validate: {
-        notEmpty: true
-      }
+
     },
     desciption: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+
     },
   }, {
     freezeTableName: true,

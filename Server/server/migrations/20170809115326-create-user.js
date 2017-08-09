@@ -1,6 +1,6 @@
 'use strict';
 module.exports = {
-  up: function(queryInterface, Sequelize) {
+  up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Users', {
       id: {
         allowNull: false,
@@ -8,11 +8,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      fullName: {
+      firstname: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      username: {
+      lastname: {
         type: Sequelize.STRING,
         allowNull: false
       },

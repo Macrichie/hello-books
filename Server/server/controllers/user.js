@@ -31,11 +31,11 @@ class User {
             handleError(400, 'Email already exists', res);
           } else {
             return db.User.create({
-              fullName: req.body.fullName,
-              username: req.body.username,
+              firstname: req.body.firstname,
+              lastname: req.body.lastname,
               email: req.body.email,
               password: req.body.password,
-              roleId: req.body.roleId || 3
+              roleId: req.body.roleId || 4
             })
               .then((newUser) => {
                 newUser.save()

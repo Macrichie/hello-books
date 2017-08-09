@@ -27,15 +27,15 @@ class Validate {
         req.checkBody('confirmPassword', 'Passwords do not match').equals(
           req.body.password);
       }
-      if (element === 'fullName') {
+      if (element === 'firstname') {
         const fullName = req.body[element];
-        req.checkBody('fullName', 'Must be alphabets').isAlpha();
-        req.checkBody('fullName', 'Required').notEmpty();
+        req.checkBody('firstname', 'Must be alphabets').isAlpha();
+        req.checkBody('firstname', 'Required').notEmpty();
       }
-      if (element === 'username') {
+      if (element === 'lastname') {
         const username = req.body[element];
-        req.checkBody('username', 'Must be alphabets').isAlpha();
-        req.checkBody('username', 'Required').notEmpty();
+        req.checkBody('lastname', 'Must be alphabets').isAlpha();
+        req.checkBody('lastname', 'Required').notEmpty();
       }
     });
   }
@@ -49,27 +49,26 @@ class Validate {
    * @memberof Validate
    */
   static user(req) {
-    let fullName, username, email, password, confirmPassword;
-    if (!req.body.fullName || !req.body.username) {
+    let firstname, lastname, email, password, confirmPassword;
+    if (!req.body.firstame || !req.body.lastname) {
       email = req.body.email;
       password = req.body.password;
       req.checkBody('email', 'Please Input Valid Email').isEmail().notEmpty();
       req.checkBody('password', 'Password is Required').notEmpty();
     } else {
       fullName = req.body.fullName;
-      username = req.body.username;
+      lastname = req.body.lastname;
       email = req.body.email;
       password = req.body.password;
       confirmPassword = req.body.confirmPassword;
-      req.checkBody('fullName', 'Full Name is Required').notEmpty();
-      req.checkBody('fullName', 'Must be alphabets').isAlpha();
-      req.checkBody('userame', 'User Name is Required').notEmpty();
-      req.checkBody('userame', 'Must be alphabets').isAlpha();
+      req.checkBody('firstname', 'First Name is Required').notEmpty();
+      req.checkBody('firstname', 'Must be alphabets').isAlpha();
+      req.checkBody('lastname', 'User Name is Required').isAlpha();
+      req.checkBody('lastname', 'Must be alphabets').isAlpha();
       req.checkBody('email', 'Email is Required').notEmpty();
       req.checkBody('email', 'Email is not valid').isEmail();
       req.checkBody('password', 'Password is Required').notEmpty();
-      req.checkBody(
-        'confirmPassword', 'Passwords do not match').equals(password);
+      req.checkBody('confirmPassword', 'Passwords do not match').equals(password);
     }
   }
 
