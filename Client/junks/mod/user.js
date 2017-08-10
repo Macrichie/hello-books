@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
-    firstname: {
+    first: {
       type: DataTypes.STRING,
       allowNull: false,
 
@@ -31,6 +31,8 @@ module.exports = (sequelize, DataTypes) => {
     },
 
   }, {
+    freezeTableName: true,
+
     classMethods: {
       associate: (models) => {
         User.belongsTo(models.Role, {
@@ -40,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
         User.hasMany(models.Books, {
           foreignKey: 'adminId',
         });
-        User.hasMany(models.borrowedBooks, {
+        User.hasMany(models.Borrowed, {
           foreignKey: 'borrowedId',
         });
       },

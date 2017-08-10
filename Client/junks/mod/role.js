@@ -5,18 +5,25 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
-
+      validate: {
+        notEmpty: true
+      }
     },
-    description: {
+    desciption: {
       type: DataTypes.STRING,
       allowNull: false,
-
+      validate: {
+        notEmpty: true
+      }
     },
   }, {
+    freezeTableName: true,
+
     classMethods: {
       associate: (models) => {
         Role.hasMany(models.User, {
-          foreignKey: 'roleId'
+          foreignKey: 'roleId',
+          as: 'roles',
         });
       }
     }
