@@ -32,10 +32,10 @@ class Book {
                   });
                 });
             }).catch((error) => {
-              res.status(400).send({ message: `We're sorry,${error} please try again`});
+              res.status(400).send({ message: `We're sorry,${error}`});
             });
         }).catch(() => {
-          res.status(400).send({ message: 'Book not created, please try again'});
+          res.status(400).send({ message: 'Something went wrong, book not created'});
         });
     }
   }
