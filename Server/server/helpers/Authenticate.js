@@ -1,18 +1,12 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
-/**
- * @class Authenticate
- */
+
+//Authenticate
+
 class Authenticate {
-  /**
-  * Return secure user details
-  *
-  * @static
-  * @param {String} request user details
-  * @returns {Object} secure data
-  * @memberof Authenticate
-  */
+//Return secure user details
+
   static setUserInfo(request) {
     return {
       id: request.id,
@@ -22,50 +16,31 @@ class Authenticate {
       roleId: request.roleId,
     };
   }
-  /**
-  * Generate a token
-  *
-  * @static
-  * @param {Object} user user details
-  * @returns {String} token
-  * @memberof Authenticate
-  */
+
+//Generate a token
+
   static generateWebToken(user) {
     return jwt.sign(user, process.env.SECRET, {
       expiresIn: 60 * 60 * 24 * 7
     });
   }
 
-  //Compares password with hashed password
+//Compares password with hashed password
 
   static verifyPassword(password, hash) {
     return bcrypt.compareSync(password, hash);
   }
 
-  /**
-   * check if input is a number
-   *
-   * @static
-   * @param {String/Integer} request
-   * @returns {Integer/Boolean} false or number
-   * @memberof Authenticate
-   */
+//check if input is a number
+
   static verify(request) {
     const number = Number(request);
     if (isNaN(number)) return false;
     return Number(request);
   }
 
-  /**
-   * Permits user or admin
-   *
-   * @static
-   * @param {request} req request object
-   * @param {response} res response object
-   * @param {Function} next next function
-   * @returns {response} response object
-   * @memberof Authenticate
-   */
+//Permits user or admin
+
   static permitUserOrAdmin(req, res, next) {
     if (
       req.user.roleId === 1 || Number(req.params.id) === Number(req.user.id)) {
@@ -76,16 +51,9 @@ class Authenticate {
       { message: 'You are unauthorized for this action' });
   }
 
-  /**
-   * Permits only admin
-   *
-   * @static
-   * @param {request} req request object
-   * @param {response} res response object
-   * @param {Function} next next function
-   * @returns {response} response object
-   * @memberof Authenticate
-   */
+
+//Permits only admin
+
   static permitAdmin(req, res, next) {
     if (req.user.roleId !== 1) {
       return res.status(401).send(
