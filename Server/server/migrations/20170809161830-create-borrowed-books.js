@@ -8,17 +8,25 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      borrowedTitle: {
+      bookId: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      borrowedId: {
+      userId: {
         type: Sequelize.INTEGER,
         allowNull: false
       },
       returnedDate: {
         type: Sequelize.DATE,
         allowNull: false
+      },
+      toReturn: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      returned: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

@@ -9,9 +9,9 @@ const auth = passport.authenticate('jwt', {
 });
 
 module.exports = (app) => {
-  app.post('/api/v1/users', userController.create);
-  app.post('/api/v1/users/login', userController.login);
-  app.post('/api/v1/users/logout', userController.logout);
+  app.post('/api/v1/users', auth, authenticate.permitAdmin, userController.create);
+  app.post('/api/v1/users/login', auth, authenticate.permitAdmin, userController.login);
+  app.post('/api/v1/users/logout', auth, authenticate.permitAdmin, userController.logout);
   app.get('/api/v1/users',
     auth, authenticate.permitAdmin, userController.search);
   app.get(

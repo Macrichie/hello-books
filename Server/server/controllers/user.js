@@ -2,32 +2,24 @@ const bcrypt = require('bcrypt');
 const db = require('../models');
 const validate = require('../helpers/Validate');
 const authenticate = require('../helpers/Authenticate');
-const handleError = require('../helpers/handleError');
 
-/**
- * @class User
- */
+
 class User {
-  /**
-  * Create a user
-  * Route: POST: /users
-  *
-  * @static
-  * @param {Object} req request object
-  * @param {Object} res response object
-  * @returns {Response} response object
-  * @memberof User
-  */
+/*
+  Create a user
+  Route: POST: /users
+*/
+
   static create(req, res) {
     validate.user(req);
     const validateErrors = req.validationErrors();
     if (validateErrors) {
-      handleError(400, validateErrors[0].msg, res);
+      res.status(400).send({message: validateErrors[0].msg});
     } else {
       db.User.findOne({ where: { email: req.body.email } })
         .then((user) => {
           if (user !== null) {
-            handleError(400, 'Email already exists', res);
+            res.status(400).send({ message: 'Email already exists'});
           } else {
             return db.User.create({
               firstname: req.body.firstname,
@@ -47,40 +39,31 @@ class User {
                       token
                     });
                   }).catch((err) => {
-                    console.log(err, 'first');
-                    handleError(400,
-                      "Signup Failed", res);
+                    res.status(400).send({ message: "Signup Failed"});
                   });
               })
               .catch((err) => {
-                console.log(err, 'second');
-                handleError(400, "Signup Failed", res);
+                res.status(400).send({ message: "Signup Failed"});
               });
           }
         });
     }
   }
 
-  /**
-  * Login a user
-  * Route: POST: /users/login
-  *
-  * @static
-  * @param {Object} req request object
-  * @param {Object} res response object
-  * @returns {Response} response object
-  * @memberof User
-  */
+/*
+Login a user
+Route: POST: /users/login
+*/
   static login(req, res) {
     validate.user(req);
     const validateErrors = req.validationErrors();
     if (validateErrors) {
-      handleError(400, validateErrors[0].msg, res);
+      res.status(400).send({message: validateErrors[0].msg});
     } else {
       db.User.findOne({ where: { email: req.body.email } })
         .then((user) => {
           if (!user) {
-            handleError(400, 'User does not exist', res);
+            res.status(400).send({ message: 'User does not exist'});
           } else {
             const verifyUser = authenticate.verifyPassword(
               req.body.password, user.password);
@@ -93,31 +76,24 @@ class User {
                 token
               });
             } else {
-              handleError(400,
-                'Wrong password, Please input correct password', res);
+              res.status(400).send({ message: 'Wrong password, Please input correct password'});
             }
           }
         })
         .catch(() => {
-          handleError(400, "Login failed", res);
+          res.status(400).send({ message: "Login failed"});
         });
     }
   }
 
-  /**
-  * Get a user
-  * Route: GET: /users/:id
-  *
-  * @static
-  * @param {Object} req request object
-  * @param {Object} res response object
-  * @returns {Response} response object
-  * @memberof User
-  */
+/*
+Get a user
+Route: GET: /users/:id
+*/
   static view(req, res) {
     const id = authenticate.verify(req.params.id);
     if (id === false) {
-      handleError(400, 'Id must be a number', res);
+      res.status(400).send({ message: 'Id must be a number'});
     }
     db.User.findOne({ where: { id } })
       .then((user) => {
@@ -128,42 +104,35 @@ class User {
               user: user.filterUserDetails()
             });
         } else {
-          handleError(404, 'User not found', res);
+          res.status(400).send({ message: 'User not found'});
         }
       })
       .catch(() => {
-        handleError(400,
-          "Sorry, an error occured, please try again", res);
+        res.status(400).send({ message: "Sorry, an error occured, please try again"});
       });
   }
 
-  /**
-  * Update a user
-  * Route: PUT: /users/:id
-  *
-  * @static
-  * @param {Object} req request object
-  * @param {Object} res response object
-  * @returns {Response} response object
-  * @memberof User
-  */
+/*
+Update a user
+Route: PUT: /users/:id
+*/
   static update(req, res) {
     validate.userUpdate(req, res);
     const validateErrors = req.validationErrors();
     if (req.body.oldPassword) {
       if (!bcrypt.compareSync(req.body.oldPassword, res.locals.user.password)) {
-        handleError(400, 'Old password is incorrect', res);
+        res.status(400).send({ message: 'Old password is incorrect'});
       }
       if (req.body.oldPassword === req.body.password) {
-        handleError(400, 'Please change your password', res);
+        res.status(400).send({ message: 'Please change your password'});
       }
     }
     if (validateErrors) {
-      handleError(400, validateErrors[0].msg, res);
+      res.status(400).send({message: validateErrors[0].msg});
     } else {
       const id = authenticate.verify(req.params.id);
       if (id === false) {
-        handleError(400, 'Id must be a number', res);
+        res.status(400).send({ message: 'Id must be a number'});
       }
       db.User.findById(id)
         .then((user) => {
@@ -171,7 +140,7 @@ class User {
             .then((existingUser) => {
               if ((existingUser.length !== 0) &&
                 (existingUser[0].id !== res.locals.user.id)) {
-                handleError(400, 'Email already exists', res);
+                res.status(400).send({ message: 'Email already exists'});
               } else {
                 user.update(req.body).then((updatedUser) => {
                   const userInfo = authenticate.setUserInfo(updatedUser);
@@ -183,41 +152,32 @@ class User {
                       token
                     });
                 }).catch(() => {
-                  handleError(400,
-                    "we're sorry, there was an error, please try again", res);
+                  res.status(400).send({ message: "we're sorry, there was an error, please try again"});
                 });
               }
             }).catch((error) => {
-              handleError(400,
-                `We're sorry,${error.errors[0].message}, please try again`,
-                res);
+              res.status(400).send({ message: `We're sorry,${error} please try again`});
             });
         })
         .catch(() => {
-          handleError(400, 'User not found', res);
+          res.status(400).send({ message: 'User not found'});
         });
     }
   }
 
-  /**
-  * Delete a user
-  * Route: DELETE: /users/:id
-  *
-  * @static
-  * @param {Object} req request object
-  * @param {Object} res response object
-  * @returns {Response} response object
-  * @memberof User
-  */
+/*
+Delete a user
+Route: DELETE: /users/:id
+*/
   static remove(req, res) {
     const id = authenticate.verify(req.params.id);
     if (id === false) {
-      handleError(400, 'Id must be a number', res);
+      res.status(400).send({ message: 'Id must be a number'});
     }
     return db.User.findById(id)
       .then((user) => {
         if (user === null) {
-          handleError(404, 'User not found', res);
+          res.status(400).send({ message: 'User not found'});
         } else {
           user.destroy()
             .then(() => {
@@ -225,21 +185,15 @@ class User {
             });
         }
       }).catch(() => {
-        handleError(400, "We're sorry, we had an error, please try again", res);
+        res.status(400).send({ message: "We're sorry, we had an error, please try again"});
       });
   }
 
-  /**
-  * Get users
-  * Route: GET: /search/users and
-  * Route: GET: /users/?limit=[integer]&offset=[integer]&q=[username]
-  *
-  * @static
-  * @param {Object} req request object
-  * @param {Object} res response object
-  * @returns {Response} response object
-  * @memberof User
-  */
+/*
+Get users
+Route: GET: /search/users and
+Route: GET: /users/?limit=[integer]&offset=[integer]&q=[username]
+*/
   static search(req, res) {
     let searchTerm = '%%';
     if (req.query.q) {
@@ -267,20 +221,14 @@ class User {
           });
       })
       .catch(() => {
-        handleError(400, "Sorry, an error occured, please try again", res);
+        res.status(400).send({ message: "Sorry, an error occured, please try again"});
       });
   }
 
-  /**
-  * Logout a user
-  * Route: POST: /users/login
-  *
-  * @static
-  * @param {Object} req request object
-  * @param {Object} res response object
-  * @returns {Response} response object
-  * @memberof User
-  */
+/*
+Logout a user
+Route: POST: /users/login
+*/
   static logout(req, res) {
     res.status(200).send({
       message: 'Success, delete user token'

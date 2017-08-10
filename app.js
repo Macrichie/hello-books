@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const dotenv = require('dotenv');
 const passport = require('passport');
-const passportConfig = require('./server/config/passport');
+const passportConfig = require('./Server/server/config/passport');
 
 //configure dotenv
 dotenv.config();
@@ -44,6 +44,6 @@ app.use(expressValidator({
 
 
 //Require our routes into the application.
-require('./server/routes')(app);
+require('./Server/server/routes')(app);
 
 module.exports = app;

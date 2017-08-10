@@ -10,7 +10,7 @@ const auth = passport.authenticate('jwt', {
 module.exports = (app) => {
   app.get('/api/v1/users/:id/books',
     auth, authenticate.permitUserOrAdmin, bookController.getUserBooks);
-  app.post('/api/v1/books', auth, bookController.create);
+  app.post('/api/v1/books', auth, authenticate.permitUserOrAdmin, bookController.create);
   app.get('/api/v1/books', auth, bookController.search);
   app.get('/api/v1/books/:id', auth, bookController.view);
   app.put('/api/v1/books/:id',

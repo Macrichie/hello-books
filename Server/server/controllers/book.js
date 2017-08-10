@@ -1,30 +1,15 @@
 const db = require('../models');
 const validate = require('../helpers/Validate');
 const authenticate = require('../helpers/Authenticate');
-const handleError = require('../helpers/handleError');
 
-//const Books = require('../models').Books;
-//const User = require('../models').User;
-
-/**
- * @class Book
- */
 class Book {
-  /**
-  * Creates a Book
-  * Route: POST: /book
-  *
-  * @static
-  * @param {Object} req request object
-  * @param {Object} res response object
-  * @return {Object} response Object containing message and created book
-  * @memberof Book
-  */
+
+//Creates a Book
   static create(req, res) {
     validate.book(req);
     const validateErrors = req.validationErrors();
     if (validateErrors) {
-      handleError(400, validateErrors[0].msg, res);
+      res.status(400).send({message: validateErrors[0].msg});
     } else {
       db.User.findById(req.user.id)
         .then((user) => {
@@ -47,31 +32,22 @@ class Book {
                   });
                 });
             }).catch((error) => {
-              handleError(400, `we're sorry,
-                book ${error.errors[0].message}, please try again`, res);
+              res.status(400).send({ message: `We're sorry,${error} please try again`});
             });
         }).catch(() => {
-          handleError(400,
-            "we're sorry, there was an error, please try again", res);
+          res.status(400).send({ message: 'Book not created, please try again'});
         });
     }
   }
 
-  /**
-  * View Books
-  * Route: GET: /books
-  *
-  * @static
-  * @param {Object} req request object
-  * @param {Object} res response object
-  * @returns {Response} response object
-  * @memberof Book
-  */
+
+/*View Books
+  Route: GET: /books*/
+
   static view(req, res) {
     const id = authenticate.verify(req.params.id);
     if (id === false) {
-      handleError(400,
-        'Id must be a number', res);
+      res.status(400).send({ message: 'Id must be a number'});
     }
     db.Book.findOne({ where: { id } })
       .then((book) => {
@@ -89,27 +65,22 @@ class Book {
                 book: book.filterBookDetails()
               });
           } else {
-            handleError(401, 'You are unauthorized to view this book', res);
+            res.status(400).send({ message: 'Book not found'});
           }
         } else {
-          handleError(404, 'Book not found', res);
+          res.status(400).send({ message: 'Book not found'});
         }
       })
       .catch((error) => {
-        handleError(400,
-          `We're sorry, ${error.errors[0].message} , please try again`, res);
+        res.status(400).send({ message: 'Sorry, book not found, please try again'});
       });
   }
 
-  /**
-  * Get a user's books
-  * Route: GET: /users/:id/books
-  *
-  * @param {Object} req request object
-  * @param {Object} res response object
-  * @returns {Response} response object
-  * @memberof Book
+  /*
+  Get a user's books
+  Route: GET: /users/:id/books
   */
+
   static getUserBooks(req, res) {
     return db.Book.findAll({
       where: { authorId: req.params.id },
@@ -125,30 +96,22 @@ class Book {
           books: books.rows
         });
       })
-      .catch(() => handleError(400,
-        "we're sorry, there was an error, please try again", res));
+      .catch(() => res.status(400).send({ message: "we're sorry, there was an error, please try again"}));
   }
 
-  /**
-  * Update a Book
-  * Route: PUT: /book/:id
-  *
-  * @static
-  * @param {Object} req request object
-  * @param {Object} res response object
-  * @returns {Response} response object
-  * @memberof Book
-  */
+/*
+Update a Book
+Route: PUT: /book/:id
+*/
   static update(req, res) {
-    // write test for method
     validate.bookUpdate(req);
     const validateErrors = req.validationErrors();
     if (validateErrors) {
-      handleError(400, validateErrors[0].msg, res);
+      res.status(400).send({message: validateErrors[0].msg});
     } else {
       const id = authenticate.verify(req.params.id);
       if (id === false) {
-        handleError(400, 'Id must be a number', res);
+        res.status(400).send({ message: 'Id must be a number'});
       }
       db.Book.findById(id)
         .then((book) => {
@@ -161,8 +124,7 @@ class Book {
             .then((existingBook) => {
               if (existingBook.length !== 0 &&
                 book.adminId !== req.user.id) {
-                handleError(400,
-                  'Book already exists', res);
+                res.status(400).send({ message: 'Book already exist'});
               }
               book.update({
                 title: req.body.title || book.title,
@@ -180,31 +142,20 @@ class Book {
                     updatedBook: updatedBook.filterBookDetails()
                   });
               }).catch((error) => {
-                handleError(400,
-                  `We're sorry, book ${error.errors[0].message}`, res);
+                res.status(400).send({ message: "Sorry,book can't be updated"});
               });
             }).catch(() => {
-              handleError(400,
-                "We're sorry, there was an error, please try again", res);
+              res.status(400).send({ message: "Sorry, there's an error please try again"});
             });
         }).catch(() => {
-          handleError(404,
-            'Book does not exist', res);
+          res.status(400).send({ message: "Book does not exist"});
         });
     }
   }
 
-  /**
-  * Get books
-  * Route: GET: /search/books?q=[title]&limit=[integer]&offset=[integer] and
-  * Route: GET: /books?q=[title]&limit=[integer]&offset=[integer]
-  *
-  * @static
-  * @param {Object} req request object
-  * @param {Object} res response object
-  * @returns {Response} response object
-  * @memberof Book
-  */
+/*
+Get books
+*/
   static search(req, res) {
     let searchTerm = '%%';
     if (req.query.q) {
@@ -258,30 +209,24 @@ class Book {
           });
       })
       .catch(() => {
-        handleError(400, "We're sorry, we had an error, please try again", res);
+        res.status(400).send({ message: "Sorry, there was an error, please try again later"});
       });
   }
 
-  /**
-  * Delete a book
-  * Route: DELETE: /books/:id
-  *
-  * @static
-  * @param {Object} req request object
-  * @param {Object} res response object
-  * @returns {Response} response object
-  * @memberof Book
-  */
+/*
+Delete a book
+Route: DELETE: /books/:id
+*/
   static delete(req, res) {
     const id = authenticate.verify(req.params.id);
     if (id === false) {
-      handleError(400, 'Id must be a number', res);
+      res.status(400).send({ message: 'Id must be a number'});
     }
     db.Book.findById(id)
       .then((book) => {
         if (Number(book.adminId) !== req.user.id &&
           req.user.roleId !== 1) {
-          handleError(401, 'You are unauthorized for this action', res);
+          res.status(400).send({ message: 'You are Unauthorized for this action'});
         } else {
           book.destroy()
             .then(() => {
@@ -289,7 +234,7 @@ class Book {
             });
         }
       }).catch(() => {
-        handleError(404, 'Book not found', res);
+        res.status(400).send({ message: 'Book not found'});
       });
   }
 }

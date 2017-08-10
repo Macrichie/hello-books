@@ -1,16 +1,8 @@
-/* eslint-disable */
-/**
- * @class Validate
- */
+
 class Validate {
-  /**
-   * Validate Input Fields for User Update
-   * 
-   * @static
-   * @param {Object} req request object
-   * @memberof Validate
-   * @return {void}
-   */
+
+//Validate Input Fields for User Update
+
   static userUpdate(req) {
     const keys = Object.keys(req.body);
     keys.forEach((element, index, array) => {
@@ -40,14 +32,9 @@ class Validate {
     });
   }
 
-  /**
-   * Validate Input Fields for user Signup and Login
-   * 
-   * @static
-   * @param {Object} req request object
-   * @return {void}
-   * @memberof Validate
-   */
+  
+//Validate Input Fields for user Signup and Login
+
   static user(req) {
     let firstname, lastname, email, password, confirmPassword;
     if (!req.body.firstname || !req.body.lastname) {
@@ -72,14 +59,9 @@ class Validate {
     }
   }
 
-  /**
-   * Validate Input Fields for creating Roles
-   * 
-   * @static
-   * @param {any} req 
-   * @memberof Validate
-   * @return {void}
-   */
+
+//Validate Input Fields for creating Roles
+
   static role(req) {
     const title = req.body.title;
     const description = req.body.description;
@@ -89,14 +71,9 @@ class Validate {
     req.checkBody('description', 'Descrition is Required').notEmpty();
   }
 
-  /**
-   * Validate Input Fields for updating Roles
-   * 
-   * @static
-   * @param {Object} req request object
-   * @return {void}
-   * @memberof Validate
-   */
+
+//Validate Input Fields for updating Roles
+
   static roleUpdate(req) {
     const keys = Object.keys(req.body);
     keys.forEach((element, index, array) => {
@@ -110,14 +87,9 @@ class Validate {
       }
     });
   }
-  /**
-   * Validate Input Fields for updating Roles
-   * 
-   * @static
-   * @param {Object} req request object
-   * @return {void}
-   * @memberof Validate
-   */
+
+//Validate Input Fields for updating Roles
+
   static book(req) {
     const title = req.body.title;
     const isbn = req.body.isbn;
@@ -136,14 +108,9 @@ class Validate {
     req.checkBody('category', 'Invalid Access Type').isAlpha().notEmpty();
   }
 
-  /**
-   * Validate Input Fields for updating Roles
-   * 
-   * @static
-   * @param {Object} req request object
-   * @return {void}
-   * @memberof Validate
-   */
+
+//Validate Input Fields for updating Roles
+
   static bookUpdate(req) {
     const keys = Object.keys(req.body);
     keys.forEach((element, index, array) => {

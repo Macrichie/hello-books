@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true
       }
     },
-    borrowerId: {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
@@ -18,11 +18,11 @@ module.exports = (sequelize, DataTypes) => {
     returnedDate: {
       type: DataTypes.DATE,
     },
-    toReturned: {
+    toReturn: {
       type: DataTypes.DATE,
       allowNull: false,
     },
-    return: {
+    returned: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
