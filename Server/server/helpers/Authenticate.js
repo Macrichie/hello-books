@@ -16,8 +16,8 @@ class Authenticate {
   static setUserInfo(request) {
     return {
       id: request.id,
-      fullName: request.fullName,
-      username: request.username,
+      firstname: request.firstname,
+      lastname: request.lastname,
       email: request.email,
       roleId: request.roleId,
     };
@@ -36,15 +36,8 @@ class Authenticate {
     });
   }
 
-  /**
-   * Compares password with hashed password
-   *
-   * @static
-   * @param {String} password password
-   * @param {String} hash hashed password
-   * @return {boolean} boolean
-   * @memberof Authenticate
-   */
+  //Compares password with hashed password
+
   static verifyPassword(password, hash) {
     return bcrypt.compareSync(password, hash);
   }

@@ -50,13 +50,13 @@ class Validate {
    */
   static user(req) {
     let firstname, lastname, email, password, confirmPassword;
-    if (!req.body.firstame || !req.body.lastname) {
+    if (!req.body.firstname || !req.body.lastname) {
       email = req.body.email;
       password = req.body.password;
       req.checkBody('email', 'Please Input Valid Email').isEmail().notEmpty();
       req.checkBody('password', 'Password is Required').notEmpty();
     } else {
-      fullName = req.body.fullName;
+      firstname = req.body.firstname;
       lastname = req.body.lastname;
       email = req.body.email;
       password = req.body.password;

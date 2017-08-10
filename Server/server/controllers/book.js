@@ -2,7 +2,6 @@ const db = require('../models');
 const validate = require('../helpers/Validate');
 const authenticate = require('../helpers/Authenticate');
 const handleError = require('../helpers/handleError');
-const paginate = require('../helpers/paginate');
 
 //const Books = require('../models').Books;
 //const User = require('../models').User;
@@ -112,27 +111,18 @@ class Book {
   * @memberof Book
   */
   static getUserBooks(req, res) {
-    const offset = authenticate.verify(req.query.offset);
-    const limit = authenticate.verify(req.query.limit);
-    if ((req.query.limit && limit === false)
-      || (req.query.offset && offset === false)) {
-      handleError(400, 'Offset and Limit must be Numbers', res);
-    }
-    return db.Book.findAndCount({
-      offset: offset || 0,
-      limit: limit || 5,
+    return db.Book.findAll({
       where: { authorId: req.params.id },
       include: [{
         model: db.User,
-        attributes: ['fullName', 'username', 'roleId']
+        attributes: ['firstname', 'lastname', 'roleId']
       }],
       order: [['createdAt', 'DESC']]
     })
       .then((books) => {
         res.status(200).send({
           message: 'Books found',
-          books: books.rows,
-          metaData: paginate(books.count, limit, offset)
+          books: books.rows
         });
       })
       .catch(() => handleError(400,
@@ -220,17 +210,9 @@ class Book {
     if (req.query.q) {
       searchTerm = `%${req.query.q}%`;
     }
-    const offset = authenticate.verify(req.query.offset);
-    const limit = authenticate.verify(req.query.limit);
-    if ((req.query.limit && limit === false)
-      || (req.query.offset && offset === false)) {
-      handleError(400, 'Offset and Limit must be Numbers', res);
-    }
     let query;
     if (req.user.roleId === 1) {
       query = {
-        offset: offset || 0,
-        limit: limit || 5,
         where: {
           $or: [
             { title: { $iLike: `%${searchTerm}%` } }
@@ -238,14 +220,12 @@ class Book {
         },
         include: [{
           model: db.User,
-          attributes: ['fullName', 'username', 'roleId']
+          attributes: ['firstame', 'lastname', 'roleId']
         }],
         order: [['createdAt', 'DESC']]
       };
     } else {
       query = {
-        offset: offset || 0,
-        limit: limit || 5,
         where: {
           $and: [{
             $or: [
@@ -263,19 +243,18 @@ class Book {
         },
         include: [{
           model: db.User,
-          attributes: ['fullName', 'userame', 'roleId']
+          attributes: ['firstname', 'lastname', 'roleId']
         }],
         order: [['createdAt', 'DESC']]
       };
     }
 
-    return db.Book.findAndCount(query)
+    return db.Book.findAll(query)
       .then((books) => {
         return res.status(200).send(
           {
             message: 'Books found',
-            bookList: books.rows,
-            metaData: paginate(books.count, limit, offset)
+            bookList: books.rows
           });
       })
       .catch(() => {

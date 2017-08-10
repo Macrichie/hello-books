@@ -3,7 +3,6 @@ const db = require('../models');
 const validate = require('../helpers/Validate');
 const authenticate = require('../helpers/Authenticate');
 const handleError = require('../helpers/handleError');
-const paginate = require('../helpers/paginate');
 
 /**
  * @class User
@@ -47,12 +46,14 @@ class User {
                       userData: savedUser.filterUserDetails(),
                       token
                     });
-                  }).catch(() => {
+                  }).catch((err) => {
+                    console.log(err, 'first');
                     handleError(400,
                       "Signup Failed", res);
                   });
               })
-              .catch(() => {
+              .catch((err) => {
+                console.log(err, 'second');
                 handleError(400, "Signup Failed", res);
               });
           }
@@ -244,15 +245,7 @@ class User {
     if (req.query.q) {
       searchTerm = `%${req.query.q}%`;
     }
-    const offset = authenticate.verify(req.query.offset);
-    const limit = authenticate.verify(req.query.limit);
-    if ((req.query.limit && limit === false)
-      || (req.query.offset && offset === false)) {
-      handleError(400, 'Offset and Limit must be Numbers', res);
-    }
     const query = {
-      offset: offset || 0,
-      limit: limit || 5,
       include: [{
         model: db.Role,
         attributes: ['title']
@@ -265,13 +258,12 @@ class User {
       }
     };
 
-    return db.User.findAndCount(query)
+    return db.User.findAll(query)
       .then((users) => {
         res.status(200).send(
           {
             message: 'Users found',
-            userList: users.rows.map(user => user.filterUserList()),
-            metaData: paginate(users.count, limit, offset)
+            userList: users.rows.map(user => user.filterUserList())
           });
       })
       .catch(() => {

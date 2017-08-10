@@ -23,7 +23,7 @@ class Role {
     validate.role(req);
     const validateErrors = req.validationErrors();
     if (validateErrors) {
-      handleError(400, validateErrors[0].msg, res);
+      res.status(400).send({ message: validateErrors[0].msg});
     } else {
       db.Role.findOne({ where: { title: req.body.title } })
         .then((role) => {

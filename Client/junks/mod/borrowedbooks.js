@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const borrowedBooks = sequelize.define('borrowedBooks', {
+  const BorrowedBook = sequelize.define('BorrowBook', {
     bookId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -28,14 +28,16 @@ module.exports = (sequelize, DataTypes) => {
     },
 
   }, {
+    freezeTableName: true,
+  
     classMethods: {
       associate: (models) => {
-        borrowedBooks.belongsTo(models.User, {
+        BorrowBook.belongsTo(models.User, {
           foreignKey: 'borrowerId',
           onDelete: 'SET NULL'
         });
       }
     }
   });
-  return borrowedBooks;
+  return BorrowedBook;
 };
