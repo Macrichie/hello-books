@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start:dev": "babel-node ./bin/www",
+    "start": "babel-node ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "babel": {
