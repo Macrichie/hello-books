@@ -1,0 +1,26 @@
+
+{
+  "development": {
+    "username": "postgres",
+    "password": "Admin999",
+    "database": "hellobooks",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "port": "5432"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "Admin999",
+    "database": "hellobooks",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "postgres",
+    "password": "Admin999",
+    "database": "HelloBooks",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "port": "5432"
+  }
+}
